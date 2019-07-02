@@ -3,7 +3,7 @@ from cerecloud_rest import CereprocRestAgent
 import datetime
 
 
-def get_cprc_tts(text, station, accent, gender):
+def get_cprc_tts(text, station, accent, gender, content):
 		file = "audio/pt_" + station + "_" + accent + datetime.datetime.now().strftime("%Y%m%d%H%M") + ".wav"
 		#read password etc from file
 		restAgent = CereprocRestAgent("https://cerevoice.com/rest/rest_1_1.php", "5ced1a69273fe", "z6rqSLhjNV", "female", "portuguese")
