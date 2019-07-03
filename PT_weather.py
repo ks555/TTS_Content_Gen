@@ -49,9 +49,9 @@ def getSummaryString(currentSummary, currentDayPart, tomorrowDayPart, tommorowSu
 
 def main():
 		parser = argparse.ArgumentParser(description='Generates wav file based on current forecast on tempo.pt')
-		parser.add_argument('station', type=str, default="cu", help='station location code (cu, ma)')
-		parser.add_argument('--accent', type=str, default="pt", help='PT accent code (pt, br, md)')
-		parser.add_argument('--gender', type=str, default="female", help='Preferred gender of speaker)')
+		parser.add_argument('station', type=str, help='station location code (cu, ma)')
+		parser.add_argument('accent', type=str, help='PT accent code (pt, br, md)')
+		parser.add_argument('-g', '--gender', type=str, default="female", help='Preferred gender of speaker)')
 		args = parser.parse_args()
 
 		feedsHTML = getHTML()
