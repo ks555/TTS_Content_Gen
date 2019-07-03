@@ -6,7 +6,7 @@ import argparse
 import datetime
 from xml.etree import ElementTree as ET
 from cerecloud_rest import CereprocRestAgent
-from utils import *
+import utils
 
 
 feeds = ["https://www.tempo.pt/gn/2268746-por-horas.htm"]
@@ -45,7 +45,7 @@ def getHighsLows(bs):
 def getSummaryString(currentSummary, currentDayPart, tomorrowDayPart, tommorowSummary, high, low):
 		string = "Isto é o tempo em Curral das Freiras. Hoje: " + currentDayPart + " " + currentSummary + ", com uma temperatura máxima de " + high + ", e uma temperatura mínima de " + low +  ". Amanhã: " + tomorrowDayPart + " " + tommorowSummary 
 		return (string)
-		
+
 
 def main():
 		parser = argparse.ArgumentParser(description='Generates wav file based on current forecast on tempo.pt')

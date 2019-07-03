@@ -8,7 +8,7 @@ from lxml import etree
 from xml.etree import ElementTree as ET
 from io import StringIO, BytesIO
 import os
-from utils import *
+import utils
 import argparse
 
 
@@ -76,7 +76,7 @@ def getSummaryString(post):
     parser.add_argument('--accent', type=str, default="pt", help='PT accent code (pt, br, md)')
     parser.add_argument('--gender', type=str, default="female", help='Preferred gender of speaker)')
     args = parser.parse_args()
-    get_cprc_tts(text, "cu", "PT", "female", content)
+    utils.get_cprc_tts(text, "cu", "PT", "female", content)
     # send to cerecloud
         
         
