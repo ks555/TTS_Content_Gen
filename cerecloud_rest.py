@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*
 import requests
 from lxml import etree
 
@@ -5,7 +6,7 @@ from lxml import etree
 class CereprocRestAgent:
 
     def __init__(self, cereproc_url, cereproc_username, cereproc_password, gender='male', language='english',
-                 sample_rate='16000', audio_format='wav'):
+                 sample_rate='8000', audio_format='wav'):
         self._cereproc_url = cereproc_url
         self._cereproc_username = cereproc_username
         self._cereproc_password = cereproc_password
@@ -25,12 +26,14 @@ class CereprocRestAgent:
 
     def __generate_request_xml(self, root, data):
         try:
+		# need to edit xml to be a SSML document so that tags can be used
+    	    #itm = etree.Element("speak", {"version":"1.1", "xmnls":"http://www.w3.org/2001/10/synthesis", "{http://www.w3.org/XML/1998/namespace}lang":"en-US"})
             rt = etree.Element(root)
             for key in data:
                 itm = etree.Element(str(key))
                 itm.text = str(data[key]).decode('utf-8')
                 rt.append(itm)
-            return etree.tostring(rt, xml_declaration=True)
+            return etree.tostring(rt, xml_declaration=True, encoding='utf-8')
         except Exception as e:
             raise e
 
@@ -60,6 +63,10 @@ class CereprocRestAgent:
                                                                   'audioFormat': audio_format,
                                                                   'sampleRate': sample_rate, 'audio3D': '',
                                                                   'metadata': metadata, 'text': text})
+	
+
+
+	print(requestxml)
         responsexml = self.__do_cprc_request(requestxml)
 
         if responsexml.findtext('resultCode') != '1':
