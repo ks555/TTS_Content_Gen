@@ -20,8 +20,8 @@ def main():
                 csvfile = open(args.file, "r")
 		csv_reader = csv.reader(csvfile, delimiter=',')
 		for idx, row in enumerate(csv_reader):
-			#print(row[0].decode("utf-8"))
-			utils.get_cprc_tts(row[0].decode("utf-8").encode("utf-8"), args.station, args.accent, args.gender, args.label+str(idx))
+			text = row[0].decode("utf-8").encode("utf-8")
+			utils.get_cprc_tts(text, args.station, args.accent, args.gender, args.label+str(idx))
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*
 import requests
 from lxml import etree
-
+import HTMLParser
 
 class CereprocRestAgent:
 
@@ -21,7 +21,9 @@ class CereprocRestAgent:
 
     def __do_cprc_request(self, data):  # raise error if http error, if network failure
         headers = {'Content-type': 'text/xml'}
+	print(self._cereproc_url)
         response = requests.post(self._cereproc_url, headers=headers, data=data)
+
         return etree.fromstring(response.text)
 
     def __generate_request_xml(self, root, data):
@@ -63,15 +65,16 @@ class CereprocRestAgent:
                                                                   'audioFormat': audio_format,
                                                                   'sampleRate': sample_rate, 'audio3D': '',
                                                                   'metadata': metadata, 'text': text})
-	
 
 
 	print(requestxml)
+	#requestxml = HTMLParser.HTMLParser().unescape(requestxml.decode('utf-8'))
         responsexml = self.__do_cprc_request(requestxml)
 
         if responsexml.findtext('resultCode') != '1':
-            raise RuntimeError('Failed to synthesize voice with Cereproc Cloud server')
-
+		print(etree.tostring(responsexml))
+            	raise RuntimeError('Failed to synthesize voice with Cereproc Cloud server')
+		
         audiofile_url = responsexml.findtext('fileUrl')
         metadata_url = responsexml.findtext('metadataUrl')
         transcription = None
