@@ -19,12 +19,13 @@ class CereprocRestAgent:
         # this class is instantiated rather than for individual TTS requests
         self._voices = self.cprc_list_voices()
 
+
     def __do_cprc_request(self, data):  # raise error if http error, if network failure
-        headers = {'Content-type': 'text/xml'}
-	print(self._cereproc_url)
+        headers = {'Content-type': 'text/xml'}    
         response = requests.post(self._cereproc_url, headers=headers, data=data)
 
         return etree.fromstring(response.text)
+
 
     def __generate_request_xml(self, root, data):
         try:
@@ -39,11 +40,13 @@ class CereprocRestAgent:
         except Exception as e:
             raise e
 
+ 
     def cprc_list_voices(self):
         requestxml = self.__generate_request_xml("listVoices", {'accountID': self._cereproc_username,
                                                                'password': self._cereproc_password})
         return self.__do_cprc_request(requestxml)
 
+ 
     def get_cprc_tts(self, text, voice=None, sample_rate=None, audio_format=None, metadata=True):
         if voice is None:
             voice = self._choose_voice()
@@ -66,9 +69,9 @@ class CereprocRestAgent:
                                                                   'sampleRate': sample_rate, 'audio3D': '',
                                                                   'metadata': metadata, 'text': text})
 
-
-	print(requestxml)
-	#requestxml = HTMLParser.HTMLParser().unescape(requestxml.decode('utf-8'))
+        
+        requestxml = HTMLParser.HTMLParser().unescape(requestxml.decode('utf-8')).encode('utf-8')
+        print(requestxml)
         responsexml = self.__do_cprc_request(requestxml)
 
         if responsexml.findtext('resultCode') != '1':
@@ -94,6 +97,7 @@ class CereprocRestAgent:
 
         return audiofile_url, transcription
 
+  
     def _choose_voice(self, language=None, gender=None, accent=None, strict_gender=False, strict_accent=False):
         voicelist = self._voices.find('voicesList')
         if language is None:

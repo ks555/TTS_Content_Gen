@@ -2,6 +2,7 @@
 import requests
 import datetime
 from cerecloud_rest import CereprocRestAgent
+from suds.client import Client
 import ConfigParser
 
 #edit for more flexible audio file names and location
@@ -20,6 +21,26 @@ def get_cprc_tts(text, station, accent, gender, content):
 		r = requests.get(url)
 		with open(file, 'wb') as f:
 				f.write(r.content)
+
+
+def get_cprc_tts_soap():
+		username = "5aec2e36c429d"
+		password = "VkZmL42e5L"
+		## SOAP Client
+		soapclient = Client("https://cerevoice.com/soap/soap_1_1.php?WSDL")
+		xml = """<speak version="1.0" 
+      xmlns="http://www.w3.org/2001/10/synthesis" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.w3.org/2001/10/synthesis
+        http://www.w3.org/TR/speech-synthesis/synthesis.xsd"
+      xmlns:myssml="http://www.example.com/ssml_extensions"
+      xmlns:claws="http://www.example.com/claws7tags"
+      xml:lang="en">&lt;prosody rate='x-slow'&gt;testing&lt;/prosody&gt;</speak>"""
+		
+		#xml = open("input.xml", "r").read()
+		
+		request = soapclient.service.speakExtended(username, password, 'Lucia', xml)
+		print(request)
 
 
 def getHTML(feed):
