@@ -4,6 +4,7 @@ import datetime
 from cerecloud_rest import CereprocRestAgent
 from suds.client import Client
 import ConfigParser
+import pytz
 
 #edit for more flexible audio file names and location
 
@@ -15,8 +16,8 @@ def get_cprc_tts(text, station, accent, gender, content):
 		# password = config['cerecloud']['CEREPROC_PASSWORD']
 		username = "5aec2e36c429d"
 		password = "VkZmL42e5L"
-		restAgent = CereprocRestAgent("https://cerevoice.com/rest/rest_1_1.php", username, password, "female", "portuguese")
-		voice = restAgent._choose_voice("portuguese", gender, accent)
+		restAgent = CereprocRestAgent("https://cerevoice.com/rest/rest_1_1.php", username, password, "female", "romanian")
+		voice = restAgent._choose_voice("romanian", gender, accent)
 		url, transcript = restAgent.get_cprc_tts(text, voice)
 		r = requests.get(url)
 		with open(file, 'wb') as f:
@@ -65,9 +66,33 @@ def getLastDate():
     else:
         return datetime.datetime.fromtimestamp(0)
 
-# move to utils
+
 def setLastDate(lastDate):   
     if os.path.exists(dateFile):
         f = open(dateFile, "w")
         f.write(str(lastDate))
         f.close()
+
+
+def getLocalTime(time_zone):
+	tz = pytz.timezone(time_zone)
+	local_time = datetime.datetime.now(tz)
+	return(local_time, tz)
+
+# make station class
+def getYrURL(station):
+	if station == 'cu':
+		url = 'https://www.yr.no/place/Portugal/Madeira/Curral_das_Freiras/forecast.xml'
+	if station == 'ro':
+		url = 'https://www.yr.no/place/Romania/Tulcea/Sf%C3%A2ntu_Gheorghe/forecast.xml'
+	else: url = None
+	return url
+
+
+def getStationLanguage(station):
+	if station == "cu":
+		return "pt"
+	if station == "ro":
+		return "ro"
+	else:
+		return None
